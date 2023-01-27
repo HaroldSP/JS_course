@@ -1,3 +1,4 @@
+/* eslint-disable semi */
 /* eslint-disable no-unused-vars */
 let title;
 let screens;
