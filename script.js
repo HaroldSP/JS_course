@@ -1,11 +1,17 @@
+/* eslint-disable prefer-const */
 /* eslint-disable semi */
 /* eslint-disable no-unused-vars */
-let title;
-let screens;
-let screenPrice;
-let rollback;
-let fullPrice;
-let adaptive;
+const title = 'Мой первый проект';
+let screens = 'Простые, Сложные, Интерактивные';
+const screensLowerCase = screens.toLocaleLowerCase();
+const screenPrice = 15000;
+const rollback = Math.round((Math.random() * 100));
+const fullPrice = 100000;
+const adaptive = true;
 
-alert('any text');
-console.log('any text');
+console.log(typeof title, typeof fullPrice, typeof adaptive);
+console.log(screens.length);
+console.log('Стоимость верстки экранов ' + screenPrice + ' рублей');
+console.log('Стоимость разработки сайта ' + fullPrice + ' рублей');
+console.log(screensLowerCase.split(', '));
+console.log(fullPrice * (rollback / 100));
