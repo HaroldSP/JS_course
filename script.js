@@ -13,14 +13,14 @@ let service2 = prompt('Какой дополнительный тип услуг
 let servicePrice2 = +prompt('Сколько это будет стоить?', 15000);
 
 const getAllServicePrices = function () {
-  let allServicePrices = servicePrice1 + servicePrice2;
-  return allServicePrices;
+  return servicePrice1 + servicePrice2;
 };
+let allServicePrices = getAllServicePrices();
 
 function getFullPrice () {
-  let fullPrice = screenPrice + getAllServicePrices();
-  return fullPrice;
+  return screenPrice + allServicePrices;
 }
+let fullPrice = getFullPrice();
 
 const getTitle = function () {
   return title.trim().charAt(0).toUpperCase() + title.trim().slice(1).toLowerCase();
@@ -28,9 +28,9 @@ const getTitle = function () {
 
 const getServicePercentPrices = function () {
   const rollback = Math.round((Math.random() * 100));
-  let servicePercentPrice = Math.ceil(getFullPrice() - (getFullPrice() * (rollback / 100)));
-  return servicePercentPrice;
+  return Math.ceil(fullPrice - (fullPrice * (rollback / 100)));
 }
+let servicePercentPrice = getServicePercentPrices();
 
 const determineDiscount = function (price) {
   if (price > 30000) {
@@ -51,14 +51,14 @@ const showTypeof = function (variable) {
 }
 
 showTypeof(getTitle());
-showTypeof(getFullPrice());
+showTypeof(fullPrice);
 showTypeof(adaptive);
 
 console.log('Экраны бывают: ' + screens.toLocaleLowerCase().split(', ')[0] + ', ' + screens.toLocaleLowerCase().split(', ')[1] + ', ' + screens.toLocaleLowerCase().split(', ')[2]);
 
-console.log(determineDiscount(getFullPrice()));
+console.log(determineDiscount(fullPrice));
 
-console.log(getServicePercentPrices(), 'итоговая стоимость за вычетом отката посреднику');
+console.log(servicePercentPrice, 'итоговая стоимость за вычетом отката посреднику');
 
 // console.log(rollback, 'базовый процент отката');
 // console.log('Стоимость верстки экранов ' + screenPrice + ' рублей');
