@@ -5,10 +5,6 @@
 
 // 1) Задание по проекту, получить каждый элемент в отдельную переменную:
 
-// Получить span с классом range-value через его родителя с классом rollback одним запросом через метод querySelector.
-// Получить все инпуты с классом total-input справа через метод getElementsByClassName. (класс total-input, получить именно элементы, а не коллекции)
-// Получить все блоки с классом screen в изменяемую переменную ( let ) через метод querySelectorAll (далее мы будем переопределять ее значение)
-
 const appData = {
   title: '',
   screens: [],
@@ -143,8 +139,25 @@ console.log(otherItemsNumbers);
 // Получить input type=range через его родителя с классом rollback одним запросом через метод querySelector.
 // main-controls__item.rollback
 
-let rollbackRangeSlider = document.querySelector('main-controls__item.rollback > input');
+let rollbackRangeSlider = document.querySelector('.rollback > .main-controls__range > input');
 console.log(rollbackRangeSlider);
+
+// Получить span с классом range-value через его родителя с классом rollback одним запросом через метод querySelector.
+let rollbackRangeSlider2 = document.querySelector('.rollback > .main-controls__range > span');
+console.log(rollbackRangeSlider2);
+
+// Получить все инпуты с классом total-input справа через метод getElementsByClassName. (класс total-input, получить именно элементы, а не коллекции) nodelist totalInputArr
+let priceLayout = document.getElementsByClassName('total-input')[0];
+let numberOfScreens = document.getElementsByClassName('total-input')[1];
+let priceAddService = document.getElementsByClassName('total-input')[2];
+let fullPrice = document.getElementsByClassName('total-input')[3];
+let rollbackPrice = document.getElementsByClassName('total-input')[4];
+console.log(priceLayout, numberOfScreens, priceAddService, fullPrice, rollbackPrice);
+
+// Получить все блоки с классом screen в изменяемую переменную ( let ) через метод querySelectorAll (далее мы будем переопределять ее значение)
+
+let screenBlocksNodeList = document.querySelectorAll('.screen');
+console.log(screenBlocksNodeList);
 
 // console.log(appData.services)
 // console.log(allServicePrices, 'allServicePrices - сумма всех доп. услуг');
