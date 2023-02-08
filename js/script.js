@@ -3,6 +3,12 @@
 /* eslint-disable no-unused-vars */
 'use strict';
 
+// 1) Задание по проекту, получить каждый элемент в отдельную переменную:
+
+// Получить span с классом range-value через его родителя с классом rollback одним запросом через метод querySelector.
+// Получить все инпуты с классом total-input справа через метод getElementsByClassName. (класс total-input, получить именно элементы, а не коллекции)
+// Получить все блоки с классом screen в изменяемую переменную ( let ) через метод querySelectorAll (далее мы будем переопределять ее значение)
+
 const appData = {
   title: '',
   screens: [],
@@ -117,6 +123,29 @@ const appData = {
 }
 
 appData.start();
+
+let title2 = document.getElementsByTagName('h1')[0];
+console.log(title2);
+let button1 = document.getElementsByClassName('handler_btn')[0];
+console.log(button1);
+let button2 = document.getElementsByClassName('handler_btn')[1];
+console.log(button2);
+let plusButton = document.querySelector('.screen-btn');
+console.log(plusButton);
+
+// Получить все элементы с классом other-items в две разные переменные. В первую элементы у которых так же присутствует класс percent, во вторую элементы у которых так же присутствует класс number через метод querySelectorAll.
+
+let otherItemsPercent = document.querySelectorAll('.other-items.percent');
+let otherItemsNumbers = document.querySelectorAll('.other-items.number');
+console.log(otherItemsPercent);
+console.log(otherItemsNumbers);
+
+// Получить input type=range через его родителя с классом rollback одним запросом через метод querySelector.
+// main-controls__item.rollback
+
+let rollbackRangeSlider = document.querySelector('main-controls__item.rollback > input');
+console.log(rollbackRangeSlider);
+
 // console.log(appData.services)
 // console.log(allServicePrices, 'allServicePrices - сумма всех доп. услуг');
 
