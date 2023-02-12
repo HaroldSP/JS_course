@@ -1,9 +1,30 @@
+/* eslint-disable camelcase */
 /* eslint-disable prefer-const */
 /* eslint-disable semi */
 /* eslint-disable no-unused-vars */
 'use strict';
 
+<<<<<<< HEAD
 // В index.html код менять нельзя, только подключите скрипт
+=======
+let title = document.getElementsByTagName('h1')[0];
+let buttonPlus = document.querySelector('.screen-btn');
+let otherItemsPercent = document.querySelectorAll('.other-items.percent');
+let otherItemsNumber = document.querySelectorAll('.other-items.number');
+
+let inputRange = document.querySelector('.rollback > .main-controls__range > input');
+let inputRangeValue = document.querySelector('.rollback > .main-controls__range > span');
+
+let startBtn = document.getElementsByClassName('handler_btn')[0];
+let resetBtn = document.getElementsByClassName('handler_btn')[1];
+
+let total_PriceLayout = document.getElementsByClassName('total-input')[0];
+let totalCount_numberOfScreens = document.getElementsByClassName('total-input')[1];
+let totalCountOther_priceAddService = document.getElementsByClassName('total-input')[2];
+let fullTotalCount_fullPrice = document.getElementsByClassName('total-input')[3];
+let totalCountRollback = document.getElementsByClassName('total-input')[4];
+let screens = document.querySelectorAll('.screen');
+>>>>>>> 8ff44b3 (Start of the practice)
 
 // Используя только файл скрипта выполнить такие действия:
 
@@ -47,6 +68,7 @@ chapters[9].after(chapters[3]);
 chapters[3].after(chapters[4]);
 chapters[7].after(chapters[5]);
 
+<<<<<<< HEAD
 chapters = document.querySelectorAll('ul.contents_5 > li');
 
 // 2nd book
@@ -69,3 +91,14 @@ let chaptersSix = document.querySelectorAll('ul.contents_6 > li');
 let chapterEight = document.createElement('li');
 chapterEight.textContent = 'Глава 8: За пределами ES6';
 chaptersSix[8].after(chapterEight);
+=======
+  logger: function () {
+    console.log(appData.fullPrice);
+    console.log(appData.servicePercentPrice);
+    console.log(appData.screens);
+    console.log(appData.services);
+  }
+}
+
+appData.start();
+>>>>>>> 8ff44b3 (Start of the practice)
