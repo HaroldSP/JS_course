@@ -7,6 +7,7 @@
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 // В index.html код менять нельзя, только подключите скрипт
 =======
 let title = document.getElementsByTagName('h1')[0];
@@ -32,6 +33,8 @@ let otherItemsNumber = document.querySelectorAll('.other-items.number');
 // Добавить свойство count в которое занести количество экранов из input.
 // В методе addPrices посчитать общее количество экранов и вывести на страницу итоговое значение в поле с подписью "Количество экранов"
 
+=======
+>>>>>>> 37fc953 (+additional task (live rollback values))
 const title = document.getElementsByTagName('h1')[0];
 const buttonPlus = document.querySelector('.screen-btn');
 const otherItemsPercent = document.querySelectorAll('.other-items.percent');
@@ -217,13 +220,10 @@ const appData = {
   addRollbackValues: function (e) {
     inputRangeValue.textContent = e.target.value;
     appData.rollback = +inputRangeValue.textContent;
+    if (appData.screensTotalNumber !== 0) {
+      totalCountRollback.value = Math.ceil(appData.fullPrice - (appData.fullPrice * (appData.rollback / 100)));
+    }
   },
-
-  // isNumber: function (str) {
-  //   if (str == null) return false;
-  //   let num = Number(str);
-  //   return !isNaN(parseFloat(num)) && isFinite(num);
-  // },
 
   determineDiscount: function (price) {
     if (price > 30000) {
