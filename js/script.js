@@ -5,27 +5,53 @@
 'use strict';
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 // В index.html код менять нельзя, только подключите скрипт
 =======
 let title = document.getElementsByTagName('h1')[0];
 let buttonPlus = document.querySelector('.screen-btn');
 let otherItemsPercent = document.querySelectorAll('.other-items.percent');
 let otherItemsNumber = document.querySelectorAll('.other-items.number');
+=======
+// 1) Запретить нажатие кнопки Рассчитать если не выбран ни один тип экрана в выпадающем списке и не введено их количество.
+// Учесть что блоков с типом экранов может быть несколько, но пустых (незаполненных) элементов быть не должно
+>>>>>>> 7b0f0da (after practice before HW start (task))
 
-let inputRange = document.querySelector('.rollback > .main-controls__range > input');
-let inputRangeValue = document.querySelector('.rollback > .main-controls__range > span');
+// 2) Повесить на input[type=range] (в блоке с классом .rollback) обработчик события.
+// При перемещении ползунка значение под ним (в элементе span) должно меняться.
+// А так же это значение должно заноситься в свойство rollback нашего объекта для последующих расчетов!
 
-let startBtn = document.getElementsByClassName('handler_btn')[0];
-let resetBtn = document.getElementsByClassName('handler_btn')[1];
+// 3) В нашем объекте присутствует метод getServicePercentPrice.
+// Данный метод рассчитывает доход с учетом отката посреднику.
+// Перенести его логику в метод addPrices и выводить в поле с подписью "Стоимость с учетом отката"
+
+// 4) В методе addScreens мы добавляем в свойство appData.screens новые объекты.
+// Добавить свойство count в которое занести количество экранов из input.
+// В методе addPrices посчитать общее количество экранов и вывести на страницу итоговое значение в поле с подписью "Количество экранов"
+
+// 5) Удалить из проекта метод getRollbackMessage
+
+const title = document.getElementsByTagName('h1')[0];
+const buttonPlus = document.querySelector('.screen-btn');
+const otherItemsPercent = document.querySelectorAll('.other-items.percent');
+const otherItemsNumber = document.querySelectorAll('.other-items.number');
+
+const inputRange = document.querySelector('.rollback > .main-controls__range > input');
+const inputRangeValue = document.querySelector('.rollback > .main-controls__range > span');
+
+const startBtn = document.getElementsByClassName('handler_btn')[0];
+const resetBtn = document.getElementsByClassName('handler_btn')[1];
 
 let total_PriceLayout = document.getElementsByClassName('total-input')[0];
-let totalCount_numberOfScreens = document.getElementsByClassName('total-input')[1];
+const totalCount_numberOfScreens = document.getElementsByClassName('total-input')[1];
 let totalCountOther_priceAddService = document.getElementsByClassName('total-input')[2];
 let fullTotalCount_fullPrice = document.getElementsByClassName('total-input')[3];
-let totalCountRollback = document.getElementsByClassName('total-input')[4];
+const totalCountRollback = document.getElementsByClassName('total-input')[4];
+
 let screens = document.querySelectorAll('.screen');
 >>>>>>> 8ff44b3 (Start of the practice)
 
+<<<<<<< HEAD
 // Используя только файл скрипта выполнить такие действия:
 
 // Удалить рекламу со страницы
@@ -67,6 +93,132 @@ chapters[2].before(chapters[9]);
 chapters[9].after(chapters[3]);
 chapters[3].after(chapters[4]);
 chapters[7].after(chapters[5]);
+=======
+const appData = {
+  title: '',
+  screens: [],
+  screenPrice: 0,
+  adaptive: true,
+  rollback: 10, // rollback: Math.round((Math.random() * 100));
+  servicePricesPercent: 0,
+  servicePricesNumber: 0,
+  fullPrice: 0,
+  servicePercentPrice: 0,
+  servicesPercent: {},
+  servicesNumber: {},
+
+  init: function () {
+    appData.addTitle();
+    startBtn.addEventListener('click', appData.start);
+    buttonPlus.addEventListener('click', appData.addScreenBlock);
+  },
+
+  addTitle: function () {
+    document.title = title.textContent;
+  },
+
+  start: function () {
+    appData.addScreens();
+    appData.addServices();
+    appData.addPrices();
+    // appData.getServicePercentPrices();
+    // appData.logger();
+    console.log(appData);
+    appData.showResult();
+  },
+
+  showResult: function () {
+    total_PriceLayout.value = appData.screenPrice;
+    totalCountOther_priceAddService.value = appData.servicePricesPercent + appData.servicePricesNumber;
+    fullTotalCount_fullPrice.value = appData.fullPrice;
+  },
+
+  addScreens: function () {
+    screens = document.querySelectorAll('.screen');
+    screens.forEach(function (screen, index) {
+      const select = screen.querySelector('select');
+      const input = screen.querySelector('input');
+      const selectName = select.options[select.selectedIndex].textContent;
+      appData.screens.push({
+        id: index,
+        name: selectName,
+        price: +select.value * +input.value
+      });
+    })
+  },
+
+  addServices: function () {
+    otherItemsPercent.forEach(function (item) {
+      const check = item.querySelector('input[type=checkbox]');
+      const label = item.querySelector('label');
+      const input = item.querySelector('input[type=text]');
+
+      if (check.checked) {
+        appData.servicesPercent[label.textContent] = +input.value;
+      }
+    })
+
+    otherItemsNumber.forEach(function (item) {
+      const check = item.querySelector('input[type=checkbox]');
+      const label = item.querySelector('label');
+      const input = item.querySelector('input[type=text]');
+
+      if (check.checked) {
+        appData.servicesNumber[label.textContent] = +input.value;
+      }
+    })
+  },
+
+  addScreenBlock: function () {
+    const cloneScreen = screens[0].cloneNode(true);
+    screens[screens.length - 1].after(cloneScreen);
+    screens = document.querySelectorAll('.screen');
+  },
+
+  addPrices: function () {
+    // let someBufferObject;
+    // someBufferObject = appData.screens.reduce((a, b) => ({ price: a.price + b.price }));
+    // appData.screenPrice = someBufferObject.price;
+
+    for (let screen of appData.screens) {
+      appData.screenPrice += +screen.price;
+    }
+
+    for (let key in appData.servicesNumber) {
+      appData.servicePricesNumber += appData.servicesNumber[key];
+    }
+
+    for (let key in appData.servicesPercent) {
+      appData.servicePricesPercent += appData.screenPrice * (appData.servicesPercent[key] / 100);
+    }
+
+    appData.fullPrice = appData.screenPrice + appData.servicePricesPercent + appData.servicePricesNumber;
+  },
+
+  // isNumber: function (str) {
+  //   if (str == null) return false;
+  //   let num = Number(str);
+  //   return !isNaN(parseFloat(num)) && isFinite(num);
+  // },
+
+  getServicePercentPrices: function () {
+    appData.servicePercentPrice = Math.ceil(appData.fullPrice - (appData.fullPrice * (appData.rollback / 100)));
+  },
+
+  determineDiscount: function (price) {
+    if (price > 30000) {
+      return 'Даем скидку в 10%';
+    } else if (price >= 15000 && price <= 30000) {
+      return 'Даем скидку в 5%';
+    } else if (price >= 0 && price < 15000) {
+      return 'Скидка не предусмотрена';
+    } else if (price < 0) {
+      return 'Что-то пошло не так';
+    } else {
+      return 'Точно что-то пошло не так';
+    }
+  },
+>>>>>>> 7b0f0da (after practice before HW start (task))
 
 <<<<<<< HEAD
 chapters = document.querySelectorAll('ul.contents_5 > li');
@@ -100,5 +252,9 @@ chaptersSix[8].after(chapterEight);
   }
 }
 
+<<<<<<< HEAD
 appData.start();
 >>>>>>> 8ff44b3 (Start of the practice)
+=======
+appData.init();
+>>>>>>> 7b0f0da (after practice before HW start (task))
