@@ -6,6 +6,7 @@
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 // В index.html код менять нельзя, только подключите скрипт
 =======
 let title = document.getElementsByTagName('h1')[0];
@@ -25,11 +26,11 @@ let otherItemsNumber = document.querySelectorAll('.other-items.number');
 // Данный метод рассчитывает доход с учетом отката посреднику.
 // Перенести его логику в метод addPrices и выводить в поле с подписью "Стоимость с учетом отката"
 
+=======
+>>>>>>> 0a4cd9d (main task done)
 // 4) В методе addScreens мы добавляем в свойство appData.screens новые объекты.
 // Добавить свойство count в которое занести количество экранов из input.
 // В методе addPrices посчитать общее количество экранов и вывести на страницу итоговое значение в поле с подписью "Количество экранов"
-
-// 5) Удалить из проекта метод getRollbackMessage
 
 const title = document.getElementsByTagName('h1')[0];
 const buttonPlus = document.querySelector('.screen-btn');
@@ -43,10 +44,10 @@ const startBtn = document.getElementsByClassName('handler_btn')[0];
 const resetBtn = document.getElementsByClassName('handler_btn')[1];
 
 let total_PriceLayout = document.getElementsByClassName('total-input')[0];
-const totalCount_numberOfScreens = document.getElementsByClassName('total-input')[1];
+let totalCount_numberOfScreens = document.getElementsByClassName('total-input')[1];
 let totalCountOther_priceAddService = document.getElementsByClassName('total-input')[2];
 let fullTotalCount_fullPrice = document.getElementsByClassName('total-input')[3];
-const totalCountRollback = document.getElementsByClassName('total-input')[4];
+let totalCountRollback = document.getElementsByClassName('total-input')[4];
 
 let screens = document.querySelectorAll('.screen');
 >>>>>>> 8ff44b3 (Start of the practice)
@@ -97,9 +98,10 @@ chapters[7].after(chapters[5]);
 const appData = {
   title: '',
   screens: [],
+  screensTotalNumber: 0,
   screenPrice: 0,
   adaptive: true,
-  rollback: 10, // rollback: Math.round((Math.random() * 100));
+  rollback: 0,
   servicePricesPercent: 0,
   servicePricesNumber: 0,
   fullPrice: 0,
@@ -111,6 +113,7 @@ const appData = {
     appData.addTitle();
     startBtn.addEventListener('click', appData.start);
     buttonPlus.addEventListener('click', appData.addScreenBlock);
+    inputRange.addEventListener('input', appData.addRollbackValues);
   },
 
   addTitle: function () {
@@ -118,10 +121,21 @@ const appData = {
   },
 
   start: function () {
+    let checkPrice = 0;
+    screens = document.querySelectorAll('.screen');
+    screens.forEach(function (screen) {
+      const select = screen.querySelector('select');
+      const input = screen.querySelector('input');
+      checkPrice = +select.value * +input.value;
+    });
+
+    if (checkPrice === 0) {
+      alert('Убедитесь, что вы корректно выбрали типы и стоимости экранов');
+      return;
+    }
     appData.addScreens();
     appData.addServices();
     appData.addPrices();
-    // appData.getServicePercentPrices();
     // appData.logger();
     console.log(appData);
     appData.showResult();
@@ -131,6 +145,8 @@ const appData = {
     total_PriceLayout.value = appData.screenPrice;
     totalCountOther_priceAddService.value = appData.servicePricesPercent + appData.servicePricesNumber;
     fullTotalCount_fullPrice.value = appData.fullPrice;
+    totalCountRollback.value = appData.servicePercentPrice;
+    totalCount_numberOfScreens.value = appData.screensTotalNumber;
   },
 
   addScreens: function () {
@@ -142,7 +158,8 @@ const appData = {
       appData.screens.push({
         id: index,
         name: selectName,
-        price: +select.value * +input.value
+        price: +select.value * +input.value,
+        count: +input.value
       });
     })
   },
@@ -176,12 +193,12 @@ const appData = {
   },
 
   addPrices: function () {
-    // let someBufferObject;
-    // someBufferObject = appData.screens.reduce((a, b) => ({ price: a.price + b.price }));
-    // appData.screenPrice = someBufferObject.price;
-
     for (let screen of appData.screens) {
       appData.screenPrice += +screen.price;
+    }
+
+    for (let screen of appData.screens) {
+      appData.screensTotalNumber += +screen.count;
     }
 
     for (let key in appData.servicesNumber) {
@@ -193,6 +210,13 @@ const appData = {
     }
 
     appData.fullPrice = appData.screenPrice + appData.servicePricesPercent + appData.servicePricesNumber;
+
+    appData.servicePercentPrice = Math.ceil(appData.fullPrice - (appData.fullPrice * (appData.rollback / 100)));
+  },
+
+  addRollbackValues: function (e) {
+    inputRangeValue.textContent = e.target.value;
+    appData.rollback = +inputRangeValue.textContent;
   },
 
   // isNumber: function (str) {
@@ -200,10 +224,6 @@ const appData = {
   //   let num = Number(str);
   //   return !isNaN(parseFloat(num)) && isFinite(num);
   // },
-
-  getServicePercentPrices: function () {
-    appData.servicePercentPrice = Math.ceil(appData.fullPrice - (appData.fullPrice * (appData.rollback / 100)));
-  },
 
   determineDiscount: function (price) {
     if (price > 30000) {
