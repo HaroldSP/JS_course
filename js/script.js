@@ -4,19 +4,6 @@
 /* eslint-disable no-unused-vars */
 'use strict';
 
-// 4) В объекте реализовать метод reset(), срабатывающий по нажатию на кнопку Сброс. Метод reset() должен привести объект к исходному состоянию:
-
-// Кнопка Сброс должна замениться на кнопку Рассчитать
-// Должны быть убраны все дополнительные элементы (которые добавлялись динамически) и значения полей ввода
-// Все input[type=text] и select должны быть разблокированы
-
-// Метод reset должен всю программу возвращать в исходное состояние
-// Метод reset() пишем самостоятельно, никаких перезагрузок страницы. Метод должен быть расписан наподобие start().
-
-// Проверить, чтобы все работало и не было ошибок в консоли
-
-// Добавить папку с уроком на свой GitHub
-
 const title = document.getElementsByTagName('h1')[0];
 let buttonPlus = document.querySelector('.screen-btn');
 const otherItemsPercent = document.querySelectorAll('.other-items.percent');
@@ -54,7 +41,7 @@ const appData = {
   init: function () {
     this.addTitle();
     startBtn.addEventListener('click', this.start);
-    // resetBtn.addEventListener('click', this.reset);
+    resetBtn.addEventListener('click', this.reset);
     buttonPlus.addEventListener('click', this.addScreenBlock);
     inputRange.addEventListener('input', this.addRollbackValues);
   },
@@ -81,7 +68,6 @@ const appData = {
     appData.addScreens();
     appData.addServices();
     appData.addPrices();
-    console.log(appData);
     appData.showResult();
     appData.blockSelectandInput();
     // appData.logger();
@@ -185,11 +171,11 @@ const appData = {
 
   blockSelectandInput: function () {
     if (this.isCalculated === true) {
-      let input = document.querySelector('input[placeholder="Количество экранов"]');
-      input.disabled = true;
+      let input = document.querySelectorAll('input[placeholder="Количество экранов"]');
+      input.forEach(function (item) { item.disabled = true });
 
-      let mainSelect = document.querySelector('select[name="views-select"]');
-      mainSelect.disabled = true;
+      let mainSelect = document.querySelectorAll('select[name="views-select"]');
+      mainSelect.forEach(function (item) { item.disabled = true });
 
       let checkboxes = document.querySelectorAll('input[type="checkbox"]');
       checkboxes.forEach(function (item) { item.disabled = true });
@@ -199,14 +185,66 @@ const appData = {
 
       startBtn.hidden = true;
       resetBtn.style = 'display: true;';
-
-      console.log('уже посчитали');
     }
   },
 
-  // reset: function () {
-  //   1
-  // },
+  reset: function () {
+    appData.title = '';
+    appData.screens = [];
+    appData.screensTotalNumber = 0;
+    appData.screenPrice = 0;
+    appData.adaptive = true;
+    appData.rollback = 0;
+    appData.servicePricesPercent = 0;
+    appData.servicePricesNumber = 0;
+    appData.fullPrice = 0;
+    appData.servicePercentPrice = 0;
+    appData.servicesPercent = {};
+    appData.servicesNumber = {};
+    appData.isCalculated = false;
+
+    let input = document.querySelectorAll('input[placeholder="Количество экранов"]');
+    input.forEach(function (item) { item.disabled = false });
+
+    let mainSelect = document.querySelectorAll('select[name="views-select"]');
+    mainSelect.forEach(function (item) { item.disabled = false });
+
+    let checkboxes = document.querySelectorAll('input[type="checkbox"]');
+    checkboxes.forEach(function (item) { item.disabled = false });
+
+    let cmsCheckbox = document.querySelector('#cms-open');
+    cmsCheckbox.checked = false;
+
+    buttonPlus = document.querySelector('.screen-btn');
+    buttonPlus.disabled = false;
+
+    startBtn.hidden = false;
+    resetBtn.style = 'display: none;';
+
+    for (let index = (screens.length - 1); index > 0; index--) {
+      screens[index].remove();
+    }
+
+    // let selectScreen = document.querySelector('[name="views-select"]');
+    // console.dir(selectScreen);
+    // selectScreen.option = 0;
+
+    otherItemsPercent.forEach((item) => {
+      const check = item.querySelector('input[type=checkbox]');
+      if (check.checked) check.checked = '';
+    })
+
+    otherItemsNumber.forEach((item) => {
+      const check = item.querySelector('input[type=checkbox]');
+      if (check.checked) check.checked = '';
+    })
+
+    total_PriceLayout.value = appData.screenPrice;
+    totalCountOther_priceAddService.value = appData.servicePricesPercent + appData.servicePricesNumber;
+    fullTotalCount_fullPrice.value = appData.fullPrice;
+    totalCountRollback.value = appData.servicePercentPrice;
+    totalCount_numberOfScreens.value = appData.screensTotalNumber;
+  },
 
   logger: function () {
     console.log(this.fullPrice);
@@ -215,14 +253,5 @@ const appData = {
     console.log(this.services);
   }
 }
-
-// startBtn
-// resetBtn
-// let test = document.getElementById('reset');
-// let test = document.getElementById('reset');
-
-// startBtn.hidden = true;
-// resetBtn.style = 'display: true;';
-// console.dir(resetBtn);
 
 appData.init();
