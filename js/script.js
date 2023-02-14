@@ -4,8 +4,6 @@
 /* eslint-disable no-unused-vars */
 'use strict';
 
-// 3) Блокировать (свойство disabled) все input[type=text] и select с левой стороны после нажатия кнопки Рассчитать, после этого кнопка Рассчитать пропадает и появляется кнопка Сброс (id=reset)
-
 // 4) В объекте реализовать метод reset(), срабатывающий по нажатию на кнопку Сброс. Метод reset() должен привести объект к исходному состоянию:
 
 // Кнопка Сброс должна замениться на кнопку Рассчитать
@@ -20,15 +18,15 @@
 // Добавить папку с уроком на свой GitHub
 
 const title = document.getElementsByTagName('h1')[0];
-const buttonPlus = document.querySelector('.screen-btn');
+let buttonPlus = document.querySelector('.screen-btn');
 const otherItemsPercent = document.querySelectorAll('.other-items.percent');
 const otherItemsNumber = document.querySelectorAll('.other-items.number');
 
 const inputRange = document.querySelector('.rollback > .main-controls__range > input');
 const inputRangeValue = document.querySelector('.rollback > .main-controls__range > span');
 
-const startBtn = document.getElementsByClassName('handler_btn')[0];
-const resetBtn = document.getElementsByClassName('handler_btn')[1];
+let startBtn = document.getElementsByClassName('handler_btn')[0];
+let resetBtn = document.getElementsByClassName('handler_btn')[1];
 
 let total_PriceLayout = document.getElementsByClassName('total-input')[0];
 let totalCount_numberOfScreens = document.getElementsByClassName('total-input')[1];
@@ -51,15 +49,17 @@ const appData = {
   servicePercentPrice: 0,
   servicesPercent: {},
   servicesNumber: {},
+  isCalculated: false,
 
   init: function () {
     this.addTitle();
     startBtn.addEventListener('click', this.start);
+    // resetBtn.addEventListener('click', this.reset);
     buttonPlus.addEventListener('click', this.addScreenBlock);
     inputRange.addEventListener('input', this.addRollbackValues);
   },
 
-  // nested methods: start, addScreenBlock, addRollbackValues. Can't use "this." inside of them.
+  // nested methods: start, reset, addScreenBlock, addRollbackValues. Can't use "this." inside of them.
 
   addTitle: function () {
     document.title = title.textContent;
@@ -83,6 +83,7 @@ const appData = {
     appData.addPrices();
     console.log(appData);
     appData.showResult();
+    appData.blockSelectandInput();
     // appData.logger();
   },
 
@@ -92,6 +93,7 @@ const appData = {
     fullTotalCount_fullPrice.value = this.fullPrice;
     totalCountRollback.value = this.servicePercentPrice;
     totalCount_numberOfScreens.value = this.screensTotalNumber;
+    this.isCalculated = true;
   },
 
   addScreens: function () {
@@ -181,6 +183,31 @@ const appData = {
     }
   },
 
+  blockSelectandInput: function () {
+    if (this.isCalculated === true) {
+      let input = document.querySelector('input[placeholder="Количество экранов"]');
+      input.disabled = true;
+
+      let mainSelect = document.querySelector('select[name="views-select"]');
+      mainSelect.disabled = true;
+
+      let checkboxes = document.querySelectorAll('input[type="checkbox"]');
+      checkboxes.forEach(function (item) { item.disabled = true });
+
+      buttonPlus = document.querySelector('.screen-btn');
+      buttonPlus.disabled = true;
+
+      startBtn.hidden = true;
+      resetBtn.style = 'display: true;';
+
+      console.log('уже посчитали');
+    }
+  },
+
+  // reset: function () {
+  //   1
+  // },
+
   logger: function () {
     console.log(this.fullPrice);
     console.log(this.servicePercentPrice);
@@ -188,5 +215,14 @@ const appData = {
     console.log(this.services);
   }
 }
+
+// startBtn
+// resetBtn
+// let test = document.getElementById('reset');
+// let test = document.getElementById('reset');
+
+// startBtn.hidden = true;
+// resetBtn.style = 'display: true;';
+// console.dir(resetBtn);
 
 appData.init();
