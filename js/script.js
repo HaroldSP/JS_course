@@ -4,10 +4,6 @@
 /* eslint-disable no-unused-vars */
 'use strict';
 
-// 1) Перевести весь проект на стрелочные функции (кроме методов объекта)
-
-// 2) В нашем объекте везде использовать this как ссылку на объект appData. Если какой то обработчик ломает контекст - привязать нужный контекст в виде объекта appData.
-
 // 3) Блокировать (свойство disabled) все input[type=text] и select с левой стороны после нажатия кнопки Рассчитать, после этого кнопка Рассчитать пропадает и появляется кнопка Сброс (id=reset)
 
 // 4) В объекте реализовать метод reset(), срабатывающий по нажатию на кнопку Сброс. Метод reset() должен привести объект к исходному состоянию:
@@ -57,11 +53,13 @@ const appData = {
   servicesNumber: {},
 
   init: function () {
-    appData.addTitle();
-    startBtn.addEventListener('click', appData.start);
-    buttonPlus.addEventListener('click', appData.addScreenBlock);
-    inputRange.addEventListener('input', appData.addRollbackValues);
+    this.addTitle();
+    startBtn.addEventListener('click', this.start);
+    buttonPlus.addEventListener('click', this.addScreenBlock);
+    inputRange.addEventListener('input', this.addRollbackValues);
   },
+
+  // nested methods: start, addScreenBlock, addRollbackValues. Can't use "this." inside of them.
 
   addTitle: function () {
     document.title = title.textContent;
@@ -70,7 +68,7 @@ const appData = {
   start: function () {
     let checkPrice = 0;
     screens = document.querySelectorAll('.screen');
-    screens.forEach(function (screen) {
+    screens.forEach((screen) => {
       const select = screen.querySelector('select');
       const input = screen.querySelector('input');
       checkPrice = +select.value * +input.value;
@@ -83,26 +81,26 @@ const appData = {
     appData.addScreens();
     appData.addServices();
     appData.addPrices();
-    // appData.logger();
     console.log(appData);
     appData.showResult();
+    // appData.logger();
   },
 
   showResult: function () {
-    total_PriceLayout.value = appData.screenPrice;
-    totalCountOther_priceAddService.value = appData.servicePricesPercent + appData.servicePricesNumber;
-    fullTotalCount_fullPrice.value = appData.fullPrice;
-    totalCountRollback.value = appData.servicePercentPrice;
-    totalCount_numberOfScreens.value = appData.screensTotalNumber;
+    total_PriceLayout.value = this.screenPrice;
+    totalCountOther_priceAddService.value = this.servicePricesPercent + this.servicePricesNumber;
+    fullTotalCount_fullPrice.value = this.fullPrice;
+    totalCountRollback.value = this.servicePercentPrice;
+    totalCount_numberOfScreens.value = this.screensTotalNumber;
   },
 
   addScreens: function () {
     screens = document.querySelectorAll('.screen');
-    screens.forEach(function (screen, index) {
+    screens.forEach((screen, index) => {
       const select = screen.querySelector('select');
       const input = screen.querySelector('input');
       const selectName = select.options[select.selectedIndex].textContent;
-      appData.screens.push({
+      this.screens.push({
         id: index,
         name: selectName,
         price: +select.value * +input.value,
@@ -112,23 +110,23 @@ const appData = {
   },
 
   addServices: function () {
-    otherItemsPercent.forEach(function (item) {
+    otherItemsPercent.forEach((item) => {
       const check = item.querySelector('input[type=checkbox]');
       const label = item.querySelector('label');
       const input = item.querySelector('input[type=text]');
 
       if (check.checked) {
-        appData.servicesPercent[label.textContent] = +input.value;
+        this.servicesPercent[label.textContent] = +input.value;
       }
     })
 
-    otherItemsNumber.forEach(function (item) {
+    otherItemsNumber.forEach((item) => {
       const check = item.querySelector('input[type=checkbox]');
       const label = item.querySelector('label');
       const input = item.querySelector('input[type=text]');
 
       if (check.checked) {
-        appData.servicesNumber[label.textContent] = +input.value;
+        this.servicesNumber[label.textContent] = +input.value;
       }
     })
   },
@@ -140,25 +138,25 @@ const appData = {
   },
 
   addPrices: function () {
-    for (let screen of appData.screens) {
-      appData.screenPrice += +screen.price;
+    for (let screen of this.screens) {
+      this.screenPrice += +screen.price;
     }
 
-    for (let screen of appData.screens) {
-      appData.screensTotalNumber += +screen.count;
+    for (let screen of this.screens) {
+      this.screensTotalNumber += +screen.count;
     }
 
-    for (let key in appData.servicesNumber) {
-      appData.servicePricesNumber += appData.servicesNumber[key];
+    for (let key in this.servicesNumber) {
+      this.servicePricesNumber += this.servicesNumber[key];
     }
 
-    for (let key in appData.servicesPercent) {
-      appData.servicePricesPercent += appData.screenPrice * (appData.servicesPercent[key] / 100);
+    for (let key in this.servicesPercent) {
+      this.servicePricesPercent += this.screenPrice * (this.servicesPercent[key] / 100);
     }
 
-    appData.fullPrice = appData.screenPrice + appData.servicePricesPercent + appData.servicePricesNumber;
+    this.fullPrice = this.screenPrice + this.servicePricesPercent + this.servicePricesNumber;
 
-    appData.servicePercentPrice = Math.ceil(appData.fullPrice - (appData.fullPrice * (appData.rollback / 100)));
+    this.servicePercentPrice = Math.ceil(this.fullPrice - (this.fullPrice * (this.rollback / 100)));
   },
 
   addRollbackValues: function (e) {
@@ -184,10 +182,10 @@ const appData = {
   },
 
   logger: function () {
-    console.log(appData.fullPrice);
-    console.log(appData.servicePercentPrice);
-    console.log(appData.screens);
-    console.log(appData.services);
+    console.log(this.fullPrice);
+    console.log(this.servicePercentPrice);
+    console.log(this.screens);
+    console.log(this.services);
   }
 }
 
