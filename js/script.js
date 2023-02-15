@@ -223,21 +223,29 @@ const appData = {
 
     for (let index = (screens.length - 1); index > 0; index--) {
       screens[index].remove();
-    }
+    };
 
-    // let selectScreen = document.querySelector('[name="views-select"]');
-    // console.dir(selectScreen);
-    // selectScreen.option = 0;
+    // getting an actual amount of screens
+    screens = document.querySelectorAll('.screen');
+
+    // seacrh for an array, if an element is not 0 than remove it or clean it.
+    screens.forEach((item, index) => {
+      if (index !== 0) item.parentElement.removeChild(item);
+      else {
+        item.querySelector('input').value = '';
+        item.querySelector('select').value = '';
+      }
+    });
 
     otherItemsPercent.forEach((item) => {
       const check = item.querySelector('input[type=checkbox]');
       if (check.checked) check.checked = '';
-    })
+    });
 
     otherItemsNumber.forEach((item) => {
       const check = item.querySelector('input[type=checkbox]');
       if (check.checked) check.checked = '';
-    })
+    });
 
     total_PriceLayout.value = appData.screenPrice;
     totalCountOther_priceAddService.value = appData.servicePricesPercent + appData.servicePricesNumber;
