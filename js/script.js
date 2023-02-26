@@ -3,6 +3,18 @@
 /* eslint-disable semi */
 /* eslint-disable no-unused-vars */
 'use strict';
+/*
+
+1) В нашем проекте (в верстке) есть input[type=checkbox] с id=cms-open. При его выборе должен открываться блок с классом hidden-cms-variants.
+Внимание, блоку с классом hidden-cms-variants необходимо добавлять свойство display: flex, а не display: block.
+2) При выборе option с значением "Другое" (value=other) должен открываться блок с классом main-controls__input, но только тот, что внутри блока с классом hidden-cms-variants (ВНИМАНИЕ, блоков с классом main-controls__input в проекте много, искать стоит внутри определенного элемента)
+3) Если в input[type=checkbox] выбран вариант с числовым value (value=50) то высчитываем общую стоимость работы с учетом данного value. Значение - процент от общей стоимости работы
+
+Пример: общая стоимость работы равна 30.000. При выборе варианта WordPress с value=50 стоимость работы рассчитывается так: 30.000 + 15.000 = 45.000 (15.000 это 50% от 30.000)
+
+4) При нажатии на кнопку Сброс метод reset() должен возвращать в исходное состояние и блок с классом hidden-cms-variants
+
+*/
 
 const title = document.getElementsByTagName('h1')[0];
 let buttonPlus = document.querySelector('.screen-btn');
