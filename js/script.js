@@ -7,7 +7,10 @@
 
 1) В нашем проекте (в верстке) есть input[type=checkbox] с id=cms-open. При его выборе должен открываться блок с классом hidden-cms-variants.
 Внимание, блоку с классом hidden-cms-variants необходимо добавлять свойство display: flex, а не display: block.
-2) При выборе option с значением "Другое" (value=other) должен открываться блок с классом main-controls__input, но только тот, что внутри блока с классом hidden-cms-variants (ВНИМАНИЕ, блоков с классом main-controls__input в проекте много, искать стоит внутри определенного элемента)
+
+2) При выборе option с значением "Другое" (value=other) должен открываться блок с классом main-controls__input, но только тот, что внутри блока с классом hidden-cms-variants
+(ВНИМАНИЕ, блоков с классом main-controls__input в проекте много, искать стоит внутри определенного элемента)
+
 3) Если в input[type=checkbox] выбран вариант с числовым value (value=50) то высчитываем общую стоимость работы с учетом данного value. Значение - процент от общей стоимости работы
 
 Пример: общая стоимость работы равна 30.000. При выборе варианта WordPress с value=50 стоимость работы рассчитывается так: 30.000 + 15.000 = 45.000 (15.000 это 50% от 30.000)
@@ -35,6 +38,8 @@ let totalCountRollback = document.getElementsByClassName('total-input')[4];
 
 let screens = document.querySelectorAll('.screen');
 
+let cmsCheckbox = document.querySelector('#cms-open'); // for exta task
+
 const appData = {
   title: '',
   screens: [],
@@ -56,6 +61,7 @@ const appData = {
     resetBtn.addEventListener('click', this.reset);
     buttonPlus.addEventListener('click', this.addScreenBlock);
     inputRange.addEventListener('input', this.addRollbackValues);
+    cmsCheckbox.addEventListener('change', this.addCMSOptions);
   },
 
   // nested methods: start, reset, addScreenBlock, addRollbackValues. Can't use "this." inside of them.
@@ -110,6 +116,23 @@ const appData = {
   },
 
   addServices: function () {
+    let cmsSelect = document.getElementById('cms-select');
+    let cmsOtherOptionsInput = document.getElementById('cms-other-input');
+
+    const selectedOption = cmsSelect.options[cmsSelect.selectedIndex];
+
+    if (selectedOption.innerHTML === 'WordPress') {
+      console.log(cmsSelect.value);
+      console.log(selectedOption.innerHTML);
+
+      this.servicesPercent[selectedOption.innerHTML] = +cmsSelect.value;
+      console.log(this.servicesPercent)
+    } else if (selectedOption.innerHTML === 'Другое') {
+      console.log(cmsOtherOptionsInput.value)
+      this.servicesPercent[selectedOption.innerHTML] = +cmsOtherOptionsInput.value;
+      console.log(this.servicesPercent)
+    }
+
     otherItemsPercent.forEach((item) => {
       const check = item.querySelector('input[type=checkbox]');
       const label = item.querySelector('label');
@@ -129,6 +152,22 @@ const appData = {
         this.servicesNumber[label.textContent] = +input.value;
       }
     })
+  },
+
+  // extra task: work with cms checkbox
+  addCMSOptions: function () {
+    let cmsOptions = document.querySelector('.hidden-cms-variants');
+    let cmsSelect = document.getElementById('cms-select');
+    let cmsOtherOptions = cmsOptions.querySelector('.main-controls__input');
+
+    if (cmsCheckbox.checked) {
+      cmsOptions.style.display = 'flex';
+
+      cmsSelect.addEventListener('change', (event) => {
+        if (event.target.value === 'other') cmsOtherOptions.style.display = 'flex';
+        else cmsOtherOptions.style.display = 'none';
+      });
+    } else cmsOptions.style.display = 'none';
   },
 
   addScreenBlock: function () {
@@ -197,6 +236,10 @@ const appData = {
 
       startBtn.hidden = true;
       resetBtn.style = 'display: true;';
+
+      // cms section
+      let cmsOtherOptionsInput = document.getElementById('cms-other-input');
+      cmsOtherOptionsInput.disabled = true;
     }
   },
 
@@ -264,6 +307,14 @@ const appData = {
     fullTotalCount_fullPrice.value = appData.fullPrice;
     totalCountRollback.value = appData.servicePercentPrice;
     totalCount_numberOfScreens.value = appData.screensTotalNumber;
+
+    // rest for cms section
+    let cmsOptions = document.querySelector('.hidden-cms-variants');
+    let cmsOtherOptionsInput = document.getElementById('cms-other-input');
+
+    cmsOtherOptionsInput.value = '';
+    cmsOptions.style.display = 'none';
+    cmsOtherOptionsInput.disabled = false;
   },
 
   logger: function () {
